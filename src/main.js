@@ -84,6 +84,3 @@ const cardNumberPattern = {
 };
 
 const cardNumberMasked = IMask(cardNumber, cardNumberPattern);
-
-const test = document.getElementById('card-number');
-console.log(test);
