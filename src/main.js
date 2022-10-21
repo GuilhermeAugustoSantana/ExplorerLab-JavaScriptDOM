@@ -66,7 +66,7 @@ const cardNumberPattern = {
     },
     {
       mask: '0000 0000 0000 0000',
-      regex: /^3[8-9]\d[0-3]|^9[2-8]\d{0,2}/,
+      regex: /^3\d[8-9][0-3]|^1\d{0,15}/,
       cardtype: 'amazon'
     },
     {
@@ -76,7 +76,7 @@ const cardNumberPattern = {
   ],
   dispatch: function (appended, dynamicMasked) {
     const number = (dynamicMasked.value + appended).replace(/\D/g, "");
-    const foundMask = dynamicMasked.compiledMasks.find(({regex}) => number.match(regex)); 
+    const foundMask = dynamicMasked.compiledMasks.find(({ regex }) => number.match(regex));
 
     console.log(foundMask);
     return foundMask;
@@ -84,3 +84,53 @@ const cardNumberPattern = {
 };
 
 const cardNumberMasked = IMask(cardNumber, cardNumberPattern);
+
+
+const addButton = document.querySelector('#add-card');
+
+addButton.addEventListener('click', (event) => {
+  alert('Catão adicionado!')
+});
+
+document.querySelector('form').addEventListener('submit', (event) => {
+  event.preventDefault();
+})
+
+const cardHolder = document.querySelector('#card-holder')
+cardHolder.addEventListener('input', () => {
+  const ccHolder = document.querySelector('.cc-holder .value');
+  ccHolder.innerText = cardHolder.value.length === 0 ? 'FULANO DA SILVA' : cardHolder.value;
+});
+
+
+securitCodeMasked.on('accept', () => {
+  updateSecurityCode(securitCodeMasked.value)
+});
+
+function updateSecurityCode(code) {
+  const ccSecurity = document.querySelector('.cc-security .value');
+  ccSecurity.innerText = code.length === 0 ? '123' : code;
+}
+
+
+cardNumberMasked.on('accept', () => {
+  const cardtype = cardNumberMasked.masked.currentMask.cardtype;
+  setCardType(cardtype);
+  updateCardNumber(cardNumberMasked.value)
+});
+
+function updateCardNumber(number) {
+  const ccNumber = document.querySelector('.cc-number');
+  ccNumber.innerText = number.length === 0 ? '1234 5678 9012 3456' : number;
+}
+
+
+expirationDateMasked.on('accept', () => {
+  updateExpirationDate(expirationDateMasked.value);
+});
+
+function updateExpirationDate(date){
+  const ccExpiration = document.querySelector('.cc-expiration .value');
+  ccExpiration.innerText = date.length === 0 ?
+  '02/32' : date;
+} 
